@@ -5,30 +5,30 @@ pkgname="$_pkgname-git"
 pkgver=3.5.0beta10.r31.b108b4416
 pkgrel=1
 pkgdesc='Shell integration of iTerm2, useful when SSH from macOS.'
-arch=('any')
-conflict=('imgcat')
+arch=(any)
+conflict=(imgcat)
 url="https://iterm2.com"
-license=('GPL')
-makedepends=('git')
+license=(GPL)
+makedepends=(git)
 provides=("$_pkgname")
 conflicts=("$_pkgname")
-source=(git+https://github.com/gnachman/iTerm2.git)
-sha256sums=('SKIP')
+source=('git+https://github.com/gnachman/iTerm2.git')
+sha256sums=(SKIP)
 
 pkgver() {
-	cd "iTerm2"
+	cd iTerm2
 	# sed converts “v3.5.0beta10-31-gb108b4416” into “3.5.0beta10.r31.b108b4416”
 	git describe --long --tags --match='v*' --exclude='*-nightly' |
 		sed 's/\([^-]*-\)g/r\1/;s/^v//;s/-/./g'
 }
 
 prepare() {
-	cd "iTerm2"
+	cd iTerm2
 	git submodule update --init submodules/iTerm2-shell-integration
 }
 
 package() {
-	cd 'iTerm2/submodules/iTerm2-shell-integration'
+	cd iTerm2/submodules/iTerm2-shell-integration
 	install -D --mode=644 shell_integration/zsh \
 		"$pkgdir/usr/share/zsh/plugins/iterm2_shell_integration.zsh"
 	mkdir --parents "$pkgdir/usr/bin"
